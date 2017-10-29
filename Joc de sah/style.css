@@ -1,0 +1,22 @@
+.table_size{
+    height: 600px;
+    width: 600px;
+}
+td{
+    height: 60px;
+    width: 60px;
+    background-color: red;
+
+}
+.container
+{
+    position:center;
+}
+.pion{
+    height: 55px;
+    width: 55px;
+}
+
+.white_box{
+    background-color: #f47b35;
+}
