@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <!-- <link rel="stylesheet" type="text/css" href="static/style.css"> -->
     <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
   
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -99,13 +100,40 @@
                       <td id="30"><img src="{{url_for('static', filename='white.png')}}" alt="pion alb" class="pion"></td>
                       <td id="40" class="box1"><img src="{{url_for('static', filename='white.png')}}" alt="pion alb" class="pion"></td> 
                       <td id="50"><img src="{{url_for('static', filename='white.png')}}" alt="pion alb" class="pion"></td>
-                      <td id="60" class="box1"><img src="white.png" alt="pion alb" class="pion"></td>
+                      <td id="60" class="box1"><img src="{{url_for('static', filename='white.png')}}" alt="pion alb" class="pion"></td>
                       <td id="70"><img src="{{url_for('static', filename='white.png')}}" alt="pion alb" class="pion"></td>
                     </tr>
                
                   </tbody></table>
                 </div>
-                  <div class="col-sm-5"></div>
+                  <div class="col-sm-5">
+                    <br />  <br />  <br />  <br />
+                    <div class="w3-card-4">
+                      <div class="w3-container w3-brown">
+                        <h2>
+                          
+                        </h2>
+                      </div>
+                      <form class="w3-container" action="." method="POST">
+                        <p>      
+                        <label class="w3-text-brown"><b>Which pawn do you want to move?</b></label>
+                        <input class="w3-input w3-border w3-sand" name="xi" type="text"></p>
+                        <p>  
+                        <p>      
+                        <label class="w3-text-brown"><b>Which pawn do you want to move?</b></label>
+                        <input class="w3-input w3-border w3-sand" name="yi" type="text"></p>
+                        <p>  
+                        <p>      
+                        <label class="w3-text-brown"><b>Where?</b></label>
+                        <input class="w3-input w3-border w3-sand" name="xf" type="text"></p>
+                        <p>      
+                        <label class="w3-text-brown"><b>Where?</b></label>
+                        <input class="w3-input w3-border w3-sand" name="xf" type="text"></p>
+                        <p>
+                        <button class="w3-btn w3-brown">Send</button></p>
+                      </form>
+                    </div>
+                  </div>
           <div class="col-sm-1"></div>
     </div>
     <div id="done">a afisat bine</div>
