@@ -12,6 +12,12 @@ class Pozitie:
         self.x = x
         self.y = y
 
+    def get_x(self):
+        return self.x
+
+    def get_y(self):
+        return self.y
+
 class Stare_posibila:
     stare_p=[]
     p=Pozitie(0,0)
@@ -20,63 +26,24 @@ class Stare_posibila:
 app = Flask(__name__)
 
 
+
+def initializeaza():
+    stare=[]
+    k=0
+    for i in range(8):
+        p=Pozitie(i,0)
+        stare.insert(k,p)
+        k=k+1
+    return stare
+
+starea_mea = initializeaza()
+stare_op = initializeaza()
+
 @app.route('/')
 def my_form():
+    for s in starea_mea:
+        print s.x, s.y
     k = 0
-    starea_mea = []
-    stare_op = []
-
-    k = 0
-    o1 = Pozitie()
-    stare_op.insert(k, o1)
-    k = k + 1
-    o2 = Pozitie(1, 0)
-    stare_op.insert(k, o2)
-    k = k + 1
-    o3 = Pozitie(2, 0)
-    stare_op.insert(k, o3)
-    k = k + 1
-    o4 = Pozitie(3, 5)
-    stare_op.insert(k, o4)
-    k = k + 1
-    o5 = Pozitie(4, 0)
-    stare_op.insert(k, o5)
-    k = k + 1
-    o6 = Pozitie(5, 2)
-    stare_op.insert(k, o6)
-    k = k + 1
-    o7 = Pozitie(6, 3)
-    stare_op.insert(k, o7)
-    k = k + 1
-    o8 = Pozitie(7, 0)
-    stare_op.insert(k, o8)
-    k = k + 1
-
-    k2 = 0
-    m1 = Pozitie()
-    starea_mea.insert(k2, m1)
-    k2 = k2 + 1
-    m2 = Pozitie(1, 0)
-    starea_mea.insert(k2, m2)
-    k2 = k2 + 1
-    m3 = Pozitie(2, 0)
-    starea_mea.insert(k2, m3)
-    k2 = k2 + 1
-    m4 = Pozitie(3, 1)
-    starea_mea.insert(k2, m4)
-    k2 = k2 + 1
-    m5 = Pozitie(4, 3)
-    starea_mea.insert(k2, m5)
-    k2 = k2 + 1
-    m6 = Pozitie(5, 3)
-    starea_mea.insert(k2, m6)
-    k2 = k2 + 1
-    m7 = Pozitie(6, 0)
-    starea_mea.insert(k2, m7)
-    k2 = k2 + 1
-    m8 = Pozitie(7, 0)
-    starea_mea.insert(k2, m8)
-    k2 = k2 + 1
     return render_template("interfata.html", starea_mea=starea_mea, stare_op=stare_op)
 
 
@@ -91,61 +58,38 @@ def my_form_post():
     xf = request.form.get('xf', 0)
     yf = request.form.get('yf', 0)
 
-    k = 0
-    starea_mea = []
-    stare_op = []
+    p = Pozitie(xi, yi)
+    pf = Pozitie(xf, yf)
+    global stare_op
+    global starea_mea
+    stemp=list(stare_op)
 
+    stare_f = list(stare_op)
+    stare_f2 = []
     k = 0
-    o1 = Pozitie()
-    stare_op.insert(k, o1)
-    k = k + 1
-    o2 = Pozitie(1, 0)
-    stare_op.insert(k, o2)
-    k = k + 1
-    o3 = Pozitie(2, 0)
-    stare_op.insert(k, o3)
-    k = k + 1
-    o4 = Pozitie(3, 5)
-    stare_op.insert(k, o4)
-    k = k + 1
-    o5 = Pozitie(4, 0)
-    stare_op.insert(k, o5)
-    k = k + 1
-    o6 = Pozitie(5, 2)
-    stare_op.insert(k, o6)
-    k = k + 1
-    o7 = Pozitie(6, 3)
-    stare_op.insert(k, o7)
-    k = k + 1
-    o8 = Pozitie(7, 0)
-    stare_op.insert(k, o8)
-    k = k + 1
 
-    k2 = 0
-    m1 = Pozitie()
-    starea_mea.insert(k2, m1)
-    k2 = k2 + 1
-    m2 = Pozitie(1, 0)
-    starea_mea.insert(k2, m2)
-    k2 = k2 + 1
-    m3 = Pozitie(2, 0)
-    starea_mea.insert(k2, m3)
-    k2 = k2 + 1
-    m4 = Pozitie(3, 1)
-    starea_mea.insert(k2, m4)
-    k2 = k2 + 1
-    m5 = Pozitie(4, 3)
-    starea_mea.insert(k2, m5)
-    k2 = k2 + 1
-    m6 = Pozitie(5, 3)
-    starea_mea.insert(k2, m6)
-    k2 = k2 + 1
-    m7 = Pozitie(6, 0)
-    starea_mea.insert(k2, m7)
-    k2 = k2 + 1
-    m8 = Pozitie(7, 0)
-    starea_mea.insert(k2, m8)
-    k2 = k2 + 1
+    for sf in stare_f:
+        if (int(p.get_x()) == sf.get_x() and int(p.get_y()) == sf.get_y()):
+            stare_f2.insert(k, pf)
+        else:
+            stare_f2.insert(k, sf)
+        k = k + 1
+
+    stare_op = list(stare_f2)
+
+    print "AI MUTAT"
+    y = print_matrice(starea_mea, stare_op)
+
+    if (stare_finala(stare_op)):
+        print "AI CASTIGAT"
+    w = strategie(starea_mea, stare_op)
+    if (stare_finala(w.stare_p)):
+        starea_mea = w.stare_p;
+    else:
+        starea_mea = muta(w.stare_p[0], w.stare_p[1], starea_mea)
+        # print "Muta", w.stare_p[0].x, w.stare_p[0].y, " la ", w.stare_p[1].x, w.stare_p[1].y
+        print "ROBO A MUTAT"
+        y = print_matrice(starea_mea, stare_op)
 
     print "DIN INTERFATA", xi, yi, xf, yf
     return render_template("interfata.html", starea_mea=starea_mea, stare_op=stare_op)
@@ -257,7 +201,7 @@ def calculeaza_cost(poz, starea_mea, stare_op):
 def cost_op(stare):
     cost=0
     for p in stare:
-        count=p.y
+        count=int(p.y)
         while count!=0:
             cost=cost+count*10
             count=count-1
@@ -285,15 +229,19 @@ def stare_finala(stare):
 
 #userul face doar mutari valide
 def muta(pozitie_initiala, pozitie_finala, stare):
-    stare_f=[]
+    stare_f=list(stare)
+    stare_f2=[]
     k=0
-    for p in stare:
-        if (p.x==pozitie_initiala.x and p.y==pozitie_initiala.y):
-            stare_f.insert(k, pozitie_finala)
+    c=pozitie_initiala.get_x()
+    d=pozitie_initiala.get_y()
+    for p in stare_f:
+        if (int(p.get_x())==c and int(p.get_y())==d):
+            stare_f2.insert(k, pozitie_finala)
         else:
-            stare_f.insert(k, p)
+            stare_f2.insert(k, p)
         k=k+1
-    return stare_f
+
+    return stare_f2
 
 def strategie(starea_mea, stare_op):
     diffMax=-5000
@@ -304,7 +252,8 @@ def strategie(starea_mea, stare_op):
             if (stare_finala(s.stare_p)):
                 return s
             c1=calculeaza_cost(s.p, s.stare_p, stare_op)
-            st=modifica_stare(s.p, stare_op)
+            temp=list(stare_op)
+            st=modifica_stare(s.p, temp)
             c2=cost_op(st)
             diff=c1-c2
             if (diff>diffMax):
@@ -318,9 +267,9 @@ def strategie(starea_mea, stare_op):
 def print_matrice(starea_mea, stare_op):
     A = [['o' for x in range(8)] for y in range(8)]
     for p in starea_mea:
-        A[p.y][p.x]='B'
+        A[int(p.y)][int(p.x)]='B'
     for p in stare_op:
-        A[7-p.y][p.x]='W'
+        A[7-int(p.y)][int(p.x)]='W'
     for i in range(8):
         for j in range(8):
             print '{:4}'.format(A[i][j]),
