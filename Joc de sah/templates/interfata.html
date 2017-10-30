@@ -24,14 +24,14 @@
             <div class="col-sm-5">
             <table border="1">
                     <tbody><tr>
-                      <td id="07"><img src="{{url_for('static', filename='black.png')}}" alt="pion negru" class="pion"></td>
-                      <td id="17" class="box1"><img src="{{url_for('static', filename='black.png')}}" alt="pion negru" class="pion"></td> 
-                      <td id="27"><img src="{{url_for('static', filename='black.png')}}" alt="pion negru" class="pion"></td>
-                      <td id="37" class="box1"><img src="{{url_for('static', filename='black.png')}}" alt="pion negru" class="pion"></td>
-                      <td id="47"><img src="{{url_for('static', filename='black.png')}}" alt="pion negru" class="pion"></td> 
-                      <td id="57" class="box1"><img src="{{url_for('static', filename='black.png')}}" alt="pion negru" class="pion"></td>
-                      <td id="67"><img src="{{url_for('static', filename='black.png')}}" alt="pion negru" class="pion"></td>
-                      <td id="77" class="box1"><img src="{{url_for('static', filename='black.png')}}" alt="pion negru" class="pion"></td>
+                      <td id="07"></td>
+                      <td id="17" class="box1"></td> 
+                      <td id="27"></td>
+                      <td id="37" class="box1"></td>
+                      <td id="47"></td> 
+                      <td id="57" class="box1"></td>
+                      <td id="67"></td>
+                      <td id="77" class="box1"></td>
                     </tr>
                     <tr>
                       <td id="06" class="box1"></td>
@@ -94,14 +94,14 @@
                       <td id="71" class="box1"></td>
                     </tr>
                     <tr>
-                      <td id="00" class="box1"><img src="{{url_for('static', filename='white.png')}}" alt="pion alb" class="pion"></td>
-                      <td id="10"><img src="{{url_for('static', filename='white.png')}}" alt="pion alb" class="pion"></td> 
-                      <td id="20" class="box1"><img src="{{url_for('static', filename='white.png')}}" alt="pion alb" class="pion"></td>
-                      <td id="30"><img src="{{url_for('static', filename='white.png')}}" alt="pion alb" class="pion"></td>
-                      <td id="40" class="box1"><img src="{{url_for('static', filename='white.png')}}" alt="pion alb" class="pion"></td> 
-                      <td id="50"><img src="{{url_for('static', filename='white.png')}}" alt="pion alb" class="pion"></td>
-                      <td id="60" class="box1"><img src="{{url_for('static', filename='white.png')}}" alt="pion alb" class="pion"></td>
-                      <td id="70"><img src="{{url_for('static', filename='white.png')}}" alt="pion alb" class="pion"></td>
+                      <td id="00" class="box1"></td>
+                      <td id="10"></td> 
+                      <td id="20" class="box1"></td>
+                      <td id="30"></td>
+                      <td id="40" class="box1"></td> 
+                      <td id="50"></td>
+                      <td id="60" class="box1"></td>
+                      <td id="70"></td>
                     </tr>
                
                   </tbody></table>
@@ -133,8 +133,36 @@
                     </div>
                   </div>
           <div class="col-sm-1"></div>
+          
+          
     </div>
-    <div id="done">a afisat bine</div>
+    <ul id="m_x" class="hide">
+        {% for v in starea_mea %}
+      <li>{{v.x}}</li>
+      <!-- <li>{{v.y}}</li> -->
+      {% endfor %}
+    </ul>
+
+    <ul id="m_y" class="hide" >
+        {% for v in starea_mea %}
+      <li>{{v.y}}</li>
+      {% endfor %}
+    </ul>
+
+    <ul id="b_x" class="hide">
+        {% for b in stare_op %}
+      <li>{{b.x}}</li>
+      {% endfor %}
+    </ul>
+
+    <ul id="b_y" class="hide">
+        {% for b in stare_op %}
+      <li>{{b.x}}</li>
+      {% endfor %}
+    </ul>
+   
+   
+    
  </div>   
 </body>
 </html>
@@ -149,6 +177,51 @@
     // id_unde_mut='23';
     // MutarePion(id_unde_mut,id_sters);
     
+
+    var vect_me_x=[];
+    for(var i=0;i<=7;i++)
+    vect_me_x[i]=document.getElementById("m_x").children[i].textContent;
+    //var a=document.getElementById("m_x").children[1].textContent;
+    //document.write(vect_me_x[i]);}
+
+    var vect_me_y=[];
+    for(var j=0;j<=7;j++)
+    vect_me_y[j]=document.getElementById("m_y").children[j].textContent;
+    //document.write(vect_me_y[j]);}
+
+    for(var k=0;k<=7;k++)
+    {
+          var a=vect_me_x[k].concat(vect_me_y[k]);
+        document.getElementById(a)
+        var elem=document.createElement("img");
+          elem.setAttribute("src","{{url_for('static', filename='white.png')}}");
+          elem.setAttribute("class","pion");
+          elem.setAttribute("alt","pion alb");
+          var ouput=document.getElementById(a).appendChild(elem);
+    }
+  
+
+    var vect_bot_x=[];
+    for(var i=0;i<=7;i++)
+    vect_bot_x[i]=document.getElementById("b_x").children[i].textContent;
+    //var a=document.getElementById("m_x").children[1].textContent;
+    //document.write(vect_bot_x[i]);}
+
+    var vect_bot_y=[];
+    for(var j=0;j<=7;j++)
+    vect_bot_y[j]=document.getElementById("b_y").children[j].textContent;
+    //document.write(vect_me_y[j]);}
+
+    for(var k=0;k<=7;k++)
+    {
+          var n=vect_bot_x[k].concat(vect_bot_y[k]);
+        document.getElementById(n)
+        var elem=document.createElement("img");
+          elem.setAttribute("src","{{url_for('static', filename='black.png')}}");
+          elem.setAttribute("class","pion");
+          elem.setAttribute("alt","pion negru");
+          var ouput=document.getElementById(n).appendChild(elem);
+    }
     function MutarePion(id_unde_mut,id_sters){
         if(document.getElementById(id_unde_mut).childElementCount==0)
         {var elem=document.createElement("img");

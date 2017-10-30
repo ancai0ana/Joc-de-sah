@@ -25,3 +25,7 @@ table{
     border-color: rgb(139, 84, 21);
     border-width: 10px;
 }
+
+hide{
+    display: none;
+}
