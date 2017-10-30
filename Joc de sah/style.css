@@ -5,7 +5,7 @@
 td{
     height: 60px;
     width: 60px;
-    background-color: red;
+    background-color: #e2ae8e;
 
 }
 .container
@@ -13,10 +13,15 @@ td{
     position:center;
 }
 .pion{
-    height: 55px;
-    width: 55px;
+    height: 50px;
+    width: 50px;
 }
 
-.white_box{
-    background-color: #f47b35;
+.box1{
+    background-color: #ce672b;
+}
+
+table{
+    border-color: rgb(139, 84, 21);
+    border-width: 10px;
 }
