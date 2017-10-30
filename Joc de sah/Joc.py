@@ -1,4 +1,24 @@
 """hi"""
+from flask import Flask
+from flask import request
+from flask import render_template
+
+app = Flask(__name__)
+
+@app.route('/')
+def my_form():
+    return render_template("interfata.html")
+
+app.debug=True
+# @app.route('/', methods=['POST'])
+# def my_form_post():
+#     # Create the kernel and learn AIML files
+#     text = request.form['text']
+#     v=Chat()
+#     v.user=text
+#     v.bot=kernel.respond(text)
+#     var.append(v)
+#     return render_template("test3.html", var=var)
 
 class Pozitie:
     x=0
@@ -102,9 +122,13 @@ def calculeaza_cost(poz, starea_mea, stare_op):
             cost=cost+count*10
             count=count-1
     pozitie_care_ma_poate_ataca=Pozitie()
-    pozitie_care_ma_poate_ataca.x=poz.x+1
+    pozitie_care_ma_poate_ataca.x=poz.x-1
     pozitie_care_ma_poate_ataca.y=6-poz.y;
-    if (search_poz(pozitie_care_ma_poate_ataca, stare_op) and pozitie_valida(pozitie_care_ma_poate_ataca)):
+    pozitie_care_ma_poate_ataca2=Pozitie()
+    pozitie_care_ma_poate_ataca2.x = poz.x + 1
+    pozitie_care_ma_poate_ataca2.y = 6 - poz.y;
+    if (search_poz(pozitie_care_ma_poate_ataca, stare_op) and pozitie_valida(pozitie_care_ma_poate_ataca)
+        or search_poz(pozitie_care_ma_poate_ataca2, stare_op) and pozitie_valida(pozitie_care_ma_poate_ataca2)):
         count = poz.y
         while count != 0:
             cost = cost - count * 10
@@ -113,7 +137,7 @@ def calculeaza_cost(poz, starea_mea, stare_op):
 
 def cost_op(stare):
     cost=0
-    for p in starea_mea:
+    for p in stare:
         count=p.y
         while count!=0:
             cost=cost+count*10
@@ -140,7 +164,7 @@ def stare_finala(stare):
     return False
 
 
-#presupunem ca userul face doar mutari valide
+#userul face doar mutari valide
 def muta(pozitie_initiala, pozitie_finala, stare):
     stare_f=[]
     k=0
@@ -152,10 +176,40 @@ def muta(pozitie_initiala, pozitie_finala, stare):
         k=k+1
     return stare_f
 
+def strategie(starea_mea, stare_op):
+    diffMax=-5000
+    stare_aleasa=Stare_posibila()
+    for p in starea_mea:
+        stari=stari_posibile(p, starea_mea, stare_op)
+        for s in stari:
+            if (stare_finala(s.stare_p)):
+                return s
+            c1=calculeaza_cost(s.p, s.stare_p, stare_op)
+            st=modifica_stare(s.p, stare_op)
+            c2=cost_op(st)
+            diff=c1-c2
+            if (diff>diffMax):
+                diffMax=diff
+                k=0
+                stare_aleasa.stare_p.insert(k, p)
+                k=k+1
+                stare_aleasa.stare_p.insert(k, s.p)
+    return stare_aleasa
 
-
+def print_matrice(starea_mea, stare_op):
+    A = [['o' for x in range(8)] for y in range(8)]
+    for p in starea_mea:
+        A[p.y][p.x]='B'
+    for p in stare_op:
+        A[7-p.y][p.x]='W'
+    for i in range(8):
+        for j in range(8):
+            print '{:4}'.format(A[i][j]),
+        print
+    return True;
 
 def main():
+    app.run()
     k=0
     starea_mea=[]
     stare_op=[]
@@ -220,9 +274,37 @@ def main():
     starea_mea.insert(k2, m8)
     k2 = k2 + 1
 
+    y = print_matrice(starea_mea, stare_op)
 
+    while (stare_finala(starea_mea)==False and stare_finala(stare_op)==False):
+        x = int(input("x initial: "))
+        y = int(input("y initial: "))
+        p=Pozitie(x,y)
+        x2 = int(input("x final: "))
+        y2 = int(input("y final: "))
+        pf = Pozitie(x2, y2)
+        stare_op=muta(p,pf,stare_op)
+        print "AI MUTAT"
+        y=print_matrice(starea_mea, stare_op)
+        w = strategie(starea_mea, stare_op)
+        if (stare_finala(w.stare_p)):
+            starea_mea=w.stare_p;
+            break;
+        starea_mea=muta(w.stare_p[0], w.stare_p[1], starea_mea)
+        #print "Muta", w.stare_p[0].x, w.stare_p[0].y, " la ", w.stare_p[1].x, w.stare_p[1].y
+        print "ROBO A MUTAT"
+        y=print_matrice(starea_mea, stare_op)
 
+    if (stare_finala(starea_mea)):
+        print "winner: AI"
+    if (stare_finala(stare_op)):
+        print "winner:human"
+    '''
     n=Pozitie(5,3)
+    w=strategie(starea_mea, stare_op)
+    print "Muta", w.stare_p[0].x, w.stare_p[0].y, " la ", w.stare_p[1].x, w.stare_p[1].y
+    for p in w.stare_p:
+        print p.x, p.y
 
     print calculeaza_cost(n, starea_mea, stare_op);
     stari=stari_posibile(n, starea_mea, stare_op);
@@ -234,10 +316,12 @@ def main():
         for p in c:
             print p.x, p.y
         print calculeaza_cost(s.p, s.stare_p, stare_op);
+    '''
 
 
 if __name__ == "__main__":
      main()
+
 
 
 
