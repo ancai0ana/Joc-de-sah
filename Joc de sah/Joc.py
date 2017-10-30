@@ -62,6 +62,8 @@ def my_form_post():
     pf = Pozitie(xf, yf)
     global stare_op
     global starea_mea
+    starea_mea = modifica_stare(pf, starea_mea)
+
     stemp=list(stare_op)
 
     stare_f = list(stare_op)
@@ -69,7 +71,7 @@ def my_form_post():
     k = 0
 
     for sf in stare_f:
-        if (int(p.get_x()) == sf.get_x() and int(p.get_y()) == sf.get_y()):
+        if (int(p.get_x()) == int(sf.get_x()) and int(p.get_y()) == int(sf.get_y())):
             stare_f2.insert(k, pf)
         else:
             stare_f2.insert(k, sf)
@@ -87,6 +89,7 @@ def my_form_post():
         starea_mea = w.stare_p;
     else:
         starea_mea = muta(w.stare_p[0], w.stare_p[1], starea_mea)
+        stare_op = modifica_stare(pf, stare_op)
         # print "Muta", w.stare_p[0].x, w.stare_p[0].y, " la ", w.stare_p[1].x, w.stare_p[1].y
         print "ROBO A MUTAT"
         y = print_matrice(starea_mea, stare_op)
@@ -97,7 +100,7 @@ def my_form_post():
 
 def search_poz (poz, stare):
     for p in stare:
-        if (p.x == poz.x and p.y==poz.y):
+        if (int(p.x) == int(poz.x) and int(p.y)==int(poz.y)):
             return True;
     return False;
 
@@ -212,8 +215,8 @@ def modifica_stare(pozitie, stare):
     stare_op=[]
     k=0
     for p in stare:
-        if (p.x==pozitie.x and p.y==7-pozitie.y):
-            p2=Pozitie(p.x,0)
+        if (int(p.x)==int(pozitie.x) and int(p.y)==7-int(pozitie.y)):
+            p2=Pozitie(-1,-1)
             stare_op.insert(k, p2)
         else:
             stare_op.insert(k, p)
@@ -359,24 +362,7 @@ def main():
         print "winner: AI"
     if (stare_finala(stare_op)):
         print "winner:human"
-    '''
-    n=Pozitie(5,3)
-    w=strategie(starea_mea, stare_op)
-    print "Muta", w.stare_p[0].x, w.stare_p[0].y, " la ", w.stare_p[1].x, w.stare_p[1].y
-    for p in w.stare_p:
-        print p.x, p.y
 
-    print calculeaza_cost(n, starea_mea, stare_op);
-    stari=stari_posibile(n, starea_mea, stare_op);
-    for s in stari:
-        for p in s.stare_p:
-            print p.x, p.y
-        c=modifica_stare(s.p, stare_op)
-        print "st"
-        for p in c:
-            print p.x, p.y
-        print calculeaza_cost(s.p, s.stare_p, stare_op);
-    '''
 
 
 if __name__ == "__main__":
