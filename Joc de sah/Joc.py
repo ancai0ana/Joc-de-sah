@@ -3,22 +3,6 @@ from flask import Flask
 from flask import request
 from flask import render_template
 
-app = Flask(__name__)
-
-@app.route('/')
-def my_form():
-    return render_template("interfata.html")
-
-app.debug=True
-# @app.route('/', methods=['POST'])
-# def my_form_post():
-#     # Create the kernel and learn AIML files
-#     text = request.form['text']
-#     v=Chat()
-#     v.user=text
-#     v.bot=kernel.respond(text)
-#     var.append(v)
-#     return render_template("test3.html", var=var)
 
 class Pozitie:
     x=0
@@ -31,6 +15,141 @@ class Pozitie:
 class Stare_posibila:
     stare_p=[]
     p=Pozitie(0,0)
+
+
+app = Flask(__name__)
+
+
+@app.route('/')
+def my_form():
+    k = 0
+    starea_mea = []
+    stare_op = []
+
+    k = 0
+    o1 = Pozitie()
+    stare_op.insert(k, o1)
+    k = k + 1
+    o2 = Pozitie(1, 0)
+    stare_op.insert(k, o2)
+    k = k + 1
+    o3 = Pozitie(2, 0)
+    stare_op.insert(k, o3)
+    k = k + 1
+    o4 = Pozitie(3, 5)
+    stare_op.insert(k, o4)
+    k = k + 1
+    o5 = Pozitie(4, 0)
+    stare_op.insert(k, o5)
+    k = k + 1
+    o6 = Pozitie(5, 2)
+    stare_op.insert(k, o6)
+    k = k + 1
+    o7 = Pozitie(6, 3)
+    stare_op.insert(k, o7)
+    k = k + 1
+    o8 = Pozitie(7, 0)
+    stare_op.insert(k, o8)
+    k = k + 1
+
+    k2 = 0
+    m1 = Pozitie()
+    starea_mea.insert(k2, m1)
+    k2 = k2 + 1
+    m2 = Pozitie(1, 0)
+    starea_mea.insert(k2, m2)
+    k2 = k2 + 1
+    m3 = Pozitie(2, 0)
+    starea_mea.insert(k2, m3)
+    k2 = k2 + 1
+    m4 = Pozitie(3, 1)
+    starea_mea.insert(k2, m4)
+    k2 = k2 + 1
+    m5 = Pozitie(4, 3)
+    starea_mea.insert(k2, m5)
+    k2 = k2 + 1
+    m6 = Pozitie(5, 3)
+    starea_mea.insert(k2, m6)
+    k2 = k2 + 1
+    m7 = Pozitie(6, 0)
+    starea_mea.insert(k2, m7)
+    k2 = k2 + 1
+    m8 = Pozitie(7, 0)
+    starea_mea.insert(k2, m8)
+    k2 = k2 + 1
+    return render_template("interfata.html", starea_mea=starea_mea, stare_op=stare_op)
+
+
+app.debug = True
+
+
+@app.route('/', methods=['POST'])
+def my_form_post():
+    print "AAAA"
+    xi = request.form.get('xi', 0)
+    yi = request.form.get('yi', 0)
+    xf = request.form.get('xf', 0)
+    yf = request.form.get('yf', 0)
+
+    k = 0
+    starea_mea = []
+    stare_op = []
+
+    k = 0
+    o1 = Pozitie()
+    stare_op.insert(k, o1)
+    k = k + 1
+    o2 = Pozitie(1, 0)
+    stare_op.insert(k, o2)
+    k = k + 1
+    o3 = Pozitie(2, 0)
+    stare_op.insert(k, o3)
+    k = k + 1
+    o4 = Pozitie(3, 5)
+    stare_op.insert(k, o4)
+    k = k + 1
+    o5 = Pozitie(4, 0)
+    stare_op.insert(k, o5)
+    k = k + 1
+    o6 = Pozitie(5, 2)
+    stare_op.insert(k, o6)
+    k = k + 1
+    o7 = Pozitie(6, 3)
+    stare_op.insert(k, o7)
+    k = k + 1
+    o8 = Pozitie(7, 0)
+    stare_op.insert(k, o8)
+    k = k + 1
+
+    k2 = 0
+    m1 = Pozitie()
+    starea_mea.insert(k2, m1)
+    k2 = k2 + 1
+    m2 = Pozitie(1, 0)
+    starea_mea.insert(k2, m2)
+    k2 = k2 + 1
+    m3 = Pozitie(2, 0)
+    starea_mea.insert(k2, m3)
+    k2 = k2 + 1
+    m4 = Pozitie(3, 1)
+    starea_mea.insert(k2, m4)
+    k2 = k2 + 1
+    m5 = Pozitie(4, 3)
+    starea_mea.insert(k2, m5)
+    k2 = k2 + 1
+    m6 = Pozitie(5, 3)
+    starea_mea.insert(k2, m6)
+    k2 = k2 + 1
+    m7 = Pozitie(6, 0)
+    starea_mea.insert(k2, m7)
+    k2 = k2 + 1
+    m8 = Pozitie(7, 0)
+    starea_mea.insert(k2, m8)
+    k2 = k2 + 1
+
+    print "DIN INTERFATA", xi, yi, xf, yf
+    return render_template("interfata.html", starea_mea=starea_mea, stare_op=stare_op)
+
 
 def search_poz (poz, stare):
     for p in stare:
@@ -213,15 +332,7 @@ def main():
     k=0
     starea_mea=[]
     stare_op=[]
-    '''
-    for i in range(8):
-        p=Pozitie();
-        p.x=i;
-        p.y=0;
-        starea_mea.insert(k, p);
-        stare_op.insert(k,p);
-        k=k+1
-    '''
+
     k=0
     o1=Pozitie()
     stare_op.insert(k,o1)
