@@ -143,32 +143,32 @@
           
           
     </div>
+   
+
     <ul id="m_x" class="hide">
-        {% for v in starea_mea %}
-      <li>{{v.x}}</li>
-      <!-- <li>{{v.y}}</li> -->
+        {% for m in stare_op %}
+      <li>{{m.x}}</li>
       {% endfor %}
     </ul>
 
-    <ul id="m_y" class="hide" >
-        {% for v in starea_mea %}
-      <li>{{v.y}}</li>
+    <ul id="m_y" class="hide">
+        {% for m in stare_op %}
+      <li>{{m.y}}</li>
       {% endfor %}
     </ul>
-
+   
     <ul id="b_x" class="hide">
-        {% for b in stare_op %}
+        {% for b in starea_mea %}
       <li>{{b.x}}</li>
+     
       {% endfor %}
     </ul>
 
-    <ul id="b_y" class="hide">
-        {% for b in stare_op %}
-      <li>{{b.x}}</li>
+    <ul id="b_y"  class="hide">
+        {% for b in starea_mea %}
+      <li>{{b.y}}</li>
       {% endfor %}
     </ul>
-   
-   
     
  </div>   
 </body>
@@ -185,11 +185,14 @@
     // MutarePion(id_unde_mut,id_sters);
     
 
+    
+  
+
     var vect_me_x=[];
     for(var i=0;i<=7;i++)
     vect_me_x[i]=document.getElementById("m_x").children[i].textContent;
     //var a=document.getElementById("m_x").children[1].textContent;
-    //document.write(vect_me_x[i]);}
+    //document.write(vect_bot_x[i]);}
 
     var vect_me_y=[];
     for(var j=0;j<=7;j++)
@@ -198,55 +201,61 @@
 
     for(var k=0;k<=7;k++)
     {
-          var a=vect_me_x[k].concat(vect_me_y[k]);
-        document.getElementById(a)
+          var n=vect_me_x[k].concat(vect_me_y[k]);
+        document.getElementById(n)
         var elem=document.createElement("img");
           elem.setAttribute("src","{{url_for('static', filename='white.png')}}");
           elem.setAttribute("class","pion");
           elem.setAttribute("alt","pion alb");
-          var ouput=document.getElementById(a).appendChild(elem);
+          var ouput=document.getElementById(n).appendChild(elem);
     }
-  
+
+
+//botul:
 
     var vect_bot_x=[];
     for(var i=0;i<=7;i++)
     vect_bot_x[i]=document.getElementById("b_x").children[i].textContent;
     //var a=document.getElementById("m_x").children[1].textContent;
-    //document.write(vect_bot_x[i]);}
+    //document.write(vect_me_x[i]);}
 
     var vect_bot_y=[];
     for(var j=0;j<=7;j++)
-    vect_bot_y[j]=document.getElementById("b_y").children[j].textContent;
-    //document.write(vect_me_y[j]);}
+    {var el=document.getElementById("b_y").children[j].textContent
+      vect_bot_y[j]=7-el;}
+   // document.write(vect_bot_y[j]);}
 
     for(var k=0;k<=7;k++)
     {
-          var n=vect_bot_x[k].concat(vect_bot_y[k]);
-        document.getElementById(n)
+          var a=vect_bot_x[k].concat(vect_bot_y[k]);
+        document.getElementById(a)
         var elem=document.createElement("img");
           elem.setAttribute("src","{{url_for('static', filename='black.png')}}");
           elem.setAttribute("class","pion");
           elem.setAttribute("alt","pion negru");
-          var ouput=document.getElementById(n).appendChild(elem);
+          var ouput=document.getElementById(a).appendChild(elem);
     }
-    function MutarePion(id_unde_mut,id_sters){
-        if(document.getElementById(id_unde_mut).childElementCount==0)
-        {var elem=document.createElement("img");
-        elem.setAttribute("src","white.png");
-        elem.setAttribute("class","pion");
-        elem.setAttribute("alt","pion alb");
-        var ouput=document.getElementById(id_unde_mut).appendChild(elem);
 
-        var elem2=document.getElementById(id_sters);
-        var output=elem2.removeChild(elem2.childNodes[0]);
-        }
-        else
-       // var verificare=document.getElementById(id_unde_mut).childNodes[0]
-       // document.getElementById("done").innerHTML = verificare;
-        //if(document.getElementById(id_unde_mut).childNodes[0].getAtribute("alt")==="white.png")
-        document.getElementById("done").innerHTML = "Te rog sa introduci o mutare valida";
-        // else
-        // document.getElementById("done").innerHTML = "nu-i bun";
-    }
+
+
+    // function MutarePion(id_unde_mut,id_sters){
+    //     if(document.getElementById(id_unde_mut).childElementCount==0)
+    //     {var elem=document.createElement("img");
+    //     elem.setAttribute("src","white.png");
+    //     elem.setAttribute("class","pion");
+    //     elem.setAttribute("alt","pion alb");
+    //     var ouput=document.getElementById(id_unde_mut).appendChild(elem);
+
+    //     var elem2=document.getElementById(id_sters);
+    //     var output=elem2.removeChild(elem2.childNodes[0]);
+    //     }
+    //     else
+    //    // var verificare=document.getElementById(id_unde_mut).childNodes[0]
+    //    // document.getElementById("done").innerHTML = verificare;
+    //     //if(document.getElementById(id_unde_mut).childNodes[0].getAtribute("alt")==="white.png")
+    //     document.getElementById("done").innerHTML = "Te rog sa introduci o mutare valida";
+    //     // else
+    //     // document.getElementById("done").innerHTML = "nu-i bun";
+    // }
 
 </script>
