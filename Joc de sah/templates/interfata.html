@@ -202,12 +202,16 @@
     for(var k=0;k<=7;k++)
     {
           var n=vect_me_x[k].concat(vect_me_y[k]);
-        document.getElementById(n)
+          //document.write(n);
+          if(n!='88')
+          {
+    
         var elem=document.createElement("img");
           elem.setAttribute("src","{{url_for('static', filename='white.png')}}");
           elem.setAttribute("class","pion");
           elem.setAttribute("alt","pion alb");
           var ouput=document.getElementById(n).appendChild(elem);
+          }
     }
 
 
@@ -221,19 +225,27 @@
 
     var vect_bot_y=[];
     for(var j=0;j<=7;j++)
-    {var el=document.getElementById("b_y").children[j].textContent
-      vect_bot_y[j]=7-el;}
+    {var el=document.getElementById("b_y").children[j].textContent;
+    if(el!="8")
+      vect_bot_y[j]=7-el;
+      else
+      vect_bot_y[j]=8;}
    // document.write(vect_bot_y[j]);}
 
     for(var k=0;k<=7;k++)
     {
           var a=vect_bot_x[k].concat(vect_bot_y[k]);
-        document.getElementById(a)
-        var elem=document.createElement("img");
-          elem.setAttribute("src","{{url_for('static', filename='black.png')}}");
-          elem.setAttribute("class","pion");
-          elem.setAttribute("alt","pion negru");
-          var ouput=document.getElementById(a).appendChild(elem);
+          if(a!='88')
+          {
+            console.log(a);
+          var elem=document.createElement("img");
+            elem.setAttribute("src","{{url_for('static', filename='black.png')}}");
+            elem.setAttribute("class","pion");
+            elem.setAttribute("alt","pion negru");
+            var ouput=document.getElementById(a).appendChild(elem);
+          }
+          else
+          document.write("se sterge");
     }
 
 
