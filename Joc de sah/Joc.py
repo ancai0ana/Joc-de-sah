@@ -65,7 +65,11 @@ def my_form_post():
 
     #verificam daca e o mutare Valida
     pos=stari_posibile(p, starea_mea, stare_op)
+
+
     print "POS"
+    for k in pos:
+        print k.p.x,k.p.y
     gasit=False
     for s in pos:
         print "PP"
@@ -153,7 +157,7 @@ def stari_posibile (p, starea_mea, stare_oponent):
     pozitie_l_mine=Pozitie()
     pozitie_l_mine.x=int(p.x)+1;
     pozitie_l_mine.y=int(p.y)+1
-    if (search_poz(pozitie_l_op, stare_oponent) and pozitie_valida(pozitie_l_op) and pozitie_valida(pozitie_l_mine)):
+    if (search_poz(pozitie_l_op, stare_oponent)==True and pozitie_valida(pozitie_l_op) and pozitie_valida(pozitie_l_mine)):
         stare_left = [];
         k = 0
         for p2 in starea_mea:
@@ -173,8 +177,8 @@ def stari_posibile (p, starea_mea, stare_oponent):
     pozitie_r_op.x=int(p.x)-1;
     pozitie_r_op.y=7-(int(p.y)+1);
     pozitie_r_mine=Pozitie()
-    pozitie_r_op.x=int(p.x)-1
-    pozitie_r_op.y=int(p.y)+1
+    pozitie_r_mine.x=int(p.x)-1
+    pozitie_r_mine.y=int(p.y)+1
     if (search_poz(pozitie_r_op, stare_oponent)==True and pozitie_valida(pozitie_r_op) and pozitie_valida(pozitie_r_mine)):
         stare_right = [];
         k = 0
