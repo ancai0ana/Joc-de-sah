@@ -44,7 +44,7 @@ def my_form():
     for s in starea_mea:
         print s.x, s.y
     k = 0
-    return render_template("interfata.html", starea_mea=starea_mea, stare_op=stare_op)
+    return render_template("interfata.html", starea_mea=starea_mea, stare_op=stare_op, eroare=False)
 
 
 app.debug = True
@@ -62,6 +62,20 @@ def my_form_post():
     pf = Pozitie(xf, yf)
     global stare_op
     global starea_mea
+
+    #verificam daca e o mutare Valida
+    pos=stari_posibile(p, starea_mea, stare_op)
+    print "POS"
+    gasit=False
+    for s in pos:
+        print "PP"
+        print
+        print s.p.x,s.p.y
+        if (int(s.p.x)==int(pf.x) and int(s.p.y)==int(pf.y)):
+            gasit=True
+    if gasit==False:
+        return render_template("interfata.html", starea_mea=starea_mea, stare_op=stare_op, eroare=True)
+
     starea_mea = modifica_stare(pf, starea_mea)
 
     stemp=list(stare_op)
@@ -80,7 +94,6 @@ def my_form_post():
     stare_op = list(stare_f2)
 
     print "AI MUTAT"
-    y = print_matrice(starea_mea, stare_op)
 
     if (stare_finala(stare_op)):
         print "AI CASTIGAT"
@@ -92,10 +105,9 @@ def my_form_post():
         stare_op = modifica_stare(pf, stare_op)
         # print "Muta", w.stare_p[0].x, w.stare_p[0].y, " la ", w.stare_p[1].x, w.stare_p[1].y
         print "ROBO A MUTAT"
-        y = print_matrice(starea_mea, stare_op)
 
     print "DIN INTERFATA", xi, yi, xf, yf
-    return render_template("interfata.html", starea_mea=starea_mea, stare_op=stare_op)
+    return render_template("interfata.html", starea_mea=starea_mea, stare_op=stare_op, eroare=False)
 
 
 def search_poz (poz, stare):
@@ -113,16 +125,16 @@ def stari_posibile (p, starea_mea, stare_oponent):
 
     #verifica in fata -middle
     pozitie_m_op=Pozitie()
-    pozitie_m_op.x=p.x;
-    pozitie_m_op.y=7-(p.y+1);
+    pozitie_m_op.x=int(p.x);
+    pozitie_m_op.y=7-(int(p.y)+1);
     pozitie_m_mine=Pozitie()
-    pozitie_m_mine.x=p.x
-    pozitie_m_mine.y=p.y+1
+    pozitie_m_mine.x=int(p.x)
+    pozitie_m_mine.y=int(p.y)+1
     if (search_poz(pozitie_m_op, stare_oponent)==False and pozitie_valida(pozitie_m_op) and pozitie_valida(pozitie_m_mine)):
         stare_middle=[];
         k=0
         for p2 in starea_mea:
-            if (p.x == p2.x and p.y == p2.y):
+            if (int(p.x) == int(p2.x) and int(p.y) == int(p2.y)):
                 stare_middle.insert(k, pozitie_m_mine);
             else:
                 stare_middle.insert(k, p2);
@@ -136,16 +148,16 @@ def stari_posibile (p, starea_mea, stare_oponent):
 
     #verifica stanga diag - left
     pozitie_l_op=Pozitie()
-    pozitie_l_op.x=p.x+1;
-    pozitie_l_op.y=7-(p.y+1);
+    pozitie_l_op.x=int(p.x)+1;
+    pozitie_l_op.y=7-(int(p.y)+1);
     pozitie_l_mine=Pozitie()
-    pozitie_l_mine.x=p.x+1;
-    pozitie_l_mine.y=p.y+1
+    pozitie_l_mine.x=int(p.x)+1;
+    pozitie_l_mine.y=int(p.y)+1
     if (search_poz(pozitie_l_op, stare_oponent) and pozitie_valida(pozitie_l_op) and pozitie_valida(pozitie_l_mine)):
         stare_left = [];
         k = 0
         for p2 in starea_mea:
-            if (p.x == p2.x and p.y == p2.y):
+            if (int(p.x) == int(p2.x) and int(p.y) == int(p2.y)):
                 stare_left.insert(k, pozitie_l_mine);
             else:
                 stare_left.insert(k, p2);
@@ -158,16 +170,16 @@ def stari_posibile (p, starea_mea, stare_oponent):
 
     #verifica dreapta diag - right
     pozitie_r_op=Pozitie()
-    pozitie_r_op.x=p.x-1;
-    pozitie_r_op.y=7-(p.y+1);
+    pozitie_r_op.x=int(p.x)-1;
+    pozitie_r_op.y=7-(int(p.y)+1);
     pozitie_r_mine=Pozitie()
-    pozitie_r_op.x=p.x-1
-    pozitie_r_op.y=p.y+1
+    pozitie_r_op.x=int(p.x)-1
+    pozitie_r_op.y=int(p.y)+1
     if (search_poz(pozitie_r_op, stare_oponent)==True and pozitie_valida(pozitie_r_op) and pozitie_valida(pozitie_r_mine)):
         stare_right = [];
         k = 0
         for p2 in starea_mea:
-            if (p.x == p2.x and p.y == p2.y):
+            if (int(p.x) == int(p2.x) and int(p.y) == int(p2.y)):
                 stare_right.insert(k, pozitie_r_mine);
             else:
                 stare_right.insert(k, p2);
@@ -216,7 +228,7 @@ def modifica_stare(pozitie, stare):
     k=0
     for p in stare:
         if (int(p.x)==int(pozitie.x) and int(p.y)==7-int(pozitie.y)):
-            p2=Pozitie(-1,-1)
+            p2=Pozitie(8,8)
             stare_op.insert(k, p2)
         else:
             stare_op.insert(k, p)
@@ -281,87 +293,30 @@ def print_matrice(starea_mea, stare_op):
 
 def main():
     app.run()
-    k=0
-    starea_mea=[]
-    stare_op=[]
 
-    k=0
-    o1=Pozitie()
-    stare_op.insert(k,o1)
-    k=k+1
-    o2=Pozitie(1,0)
-    stare_op.insert(k, o2)
-    k = k + 1
-    o3=Pozitie(2,0)
-    stare_op.insert(k, o3)
-    k = k + 1
-    o4=Pozitie(3,5)
-    stare_op.insert(k, o4)
-    k = k + 1
-    o5=Pozitie(4,0)
-    stare_op.insert(k, o5)
-    k = k + 1
-    o6=Pozitie(5,2)
-    stare_op.insert(k, o6)
-    k = k + 1
-    o7=Pozitie(6,3)
-    stare_op.insert(k, o7)
-    k = k + 1
-    o8=Pozitie(7,0)
-    stare_op.insert(k, o8)
-    k = k + 1
-
-    k2=0
-    m1=Pozitie()
-    starea_mea.insert(k2, m1)
-    k2=k2+1
-    m2=Pozitie(1,0)
-    starea_mea.insert(k2, m2)
-    k2 = k2 + 1
-    m3=Pozitie(2,0)
-    starea_mea.insert(k2, m3)
-    k2 = k2 + 1
-    m4=Pozitie(3,1)
-    starea_mea.insert(k2, m4)
-    k2 = k2 + 1
-    m5=Pozitie(4,3)
-    starea_mea.insert(k2, m5)
-    k2 = k2 + 1
-    m6=Pozitie(5,3)
-    starea_mea.insert(k2, m6)
-    k2 = k2 + 1
-    m7=Pozitie(6,0)
-    starea_mea.insert(k2, m7)
-    k2 = k2 + 1
-    m8=Pozitie(7,0)
-    starea_mea.insert(k2, m8)
-    k2 = k2 + 1
-
-    y = print_matrice(starea_mea, stare_op)
-
-    while (stare_finala(starea_mea)==False and stare_finala(stare_op)==False):
-        x = int(input("x initial: "))
-        y = int(input("y initial: "))
-        p=Pozitie(x,y)
-        x2 = int(input("x final: "))
-        y2 = int(input("y final: "))
-        pf = Pozitie(x2, y2)
-        stare_op=muta(p,pf,stare_op)
-        print "AI MUTAT"
-        y=print_matrice(starea_mea, stare_op)
-        w = strategie(starea_mea, stare_op)
-        if (stare_finala(w.stare_p)):
-            starea_mea=w.stare_p;
-            break;
-        starea_mea=muta(w.stare_p[0], w.stare_p[1], starea_mea)
-        #print "Muta", w.stare_p[0].x, w.stare_p[0].y, " la ", w.stare_p[1].x, w.stare_p[1].y
-        print "ROBO A MUTAT"
-        y=print_matrice(starea_mea, stare_op)
-
-    if (stare_finala(starea_mea)):
-        print "winner: AI"
-    if (stare_finala(stare_op)):
-        print "winner:human"
+    # while (stare_finala(starea_mea)==False and stare_finala(stare_op)==False):
+    #     x = int(input("x initial: "))
+    #     y = int(input("y initial: "))
+    #     p=Pozitie(x,y)
+    #     x2 = int(input("x final: "))
+    #     y2 = int(input("y final: "))
+    #     pf = Pozitie(x2, y2)
+    #     stare_op=muta(p,pf,stare_op)
+    #     print "AI MUTAT"
+    #     y=print_matrice(starea_mea, stare_op)
+    #     w = strategie(starea_mea, stare_op)
+    #     if (stare_finala(w.stare_p)):
+    #         starea_mea=w.stare_p;
+    #         break;
+    #     starea_mea=muta(w.stare_p[0], w.stare_p[1], starea_mea)
+    #     #print "Muta", w.stare_p[0].x, w.stare_p[0].y, " la ", w.stare_p[1].x, w.stare_p[1].y
+    #     print "ROBO A MUTAT"
+    #     y=print_matrice(starea_mea, stare_op)
+    #
+    # if (stare_finala(starea_mea)):
+    #     print "winner: AI"
+    # if (stare_finala(stare_op)):
+    #     print "winner:human"
 
 
 
