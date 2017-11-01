@@ -52,7 +52,6 @@ app.debug = True
 
 @app.route('/', methods=['POST'])
 def my_form_post():
-    print "AAAA"
     xi = request.form.get('xi', 0)
     yi = request.form.get('yi', 0)
     xf = request.form.get('xf', 0)
@@ -64,23 +63,22 @@ def my_form_post():
     global starea_mea
 
     #verificam daca e o mutare Valida
-    pos=stari_posibile(p, starea_mea, stare_op)
+    pos=stari_posibile(p, stare_op, starea_mea)
 
 
-    print "POS"
-    for k in pos:
-        print k.p.x,k.p.y
+
     gasit=False
     for s in pos:
-        print "PP"
-        print
-        print s.p.x,s.p.y
         if (int(s.p.x)==int(pf.x) and int(s.p.y)==int(pf.y)):
             gasit=True
     if gasit==False:
+        pos = stari_posibile(p, stare_op, starea_mea)
+        print "nu se poate"
         return render_template("interfata.html", starea_mea=starea_mea, stare_op=stare_op, eroare=True)
 
-    starea_mea = modifica_stare(pf, starea_mea)
+    r = Pozitie(pf.x, 7 -int(pf.y))
+
+    starea_mea = modifica_stare(r, starea_mea)
 
     stemp=list(stare_op)
 
@@ -106,7 +104,8 @@ def my_form_post():
         starea_mea = w.stare_p;
     else:
         starea_mea = muta(w.stare_p[0], w.stare_p[1], starea_mea)
-        stare_op = modifica_stare(pf, stare_op)
+        r=Pozitie(w.stare_p[1].x, 7-int(w.stare_p[1].y))
+        stare_op = modifica_stare(r, stare_op)
         # print "Muta", w.stare_p[0].x, w.stare_p[0].y, " la ", w.stare_p[1].x, w.stare_p[1].y
         print "ROBO A MUTAT"
 
@@ -134,7 +133,8 @@ def stari_posibile (p, starea_mea, stare_oponent):
     pozitie_m_mine=Pozitie()
     pozitie_m_mine.x=int(p.x)
     pozitie_m_mine.y=int(p.y)+1
-    if (search_poz(pozitie_m_op, stare_oponent)==False and pozitie_valida(pozitie_m_op) and pozitie_valida(pozitie_m_mine)):
+    if (search_poz(pozitie_m_op, stare_oponent)==False and search_poz(pozitie_m_mine, starea_mea)==False
+        and pozitie_valida(pozitie_m_op) and pozitie_valida(pozitie_m_mine)):
         stare_middle=[];
         k=0
         for p2 in starea_mea:
@@ -157,7 +157,8 @@ def stari_posibile (p, starea_mea, stare_oponent):
     pozitie_l_mine=Pozitie()
     pozitie_l_mine.x=int(p.x)+1;
     pozitie_l_mine.y=int(p.y)+1
-    if (search_poz(pozitie_l_op, stare_oponent)==True and pozitie_valida(pozitie_l_op) and pozitie_valida(pozitie_l_mine)):
+    if (search_poz(pozitie_l_op, stare_oponent)==True and search_poz(pozitie_l_mine, starea_mea)==False
+        and pozitie_valida(pozitie_l_op) and pozitie_valida(pozitie_l_mine)):
         stare_left = [];
         k = 0
         for p2 in starea_mea:
@@ -179,7 +180,8 @@ def stari_posibile (p, starea_mea, stare_oponent):
     pozitie_r_mine=Pozitie()
     pozitie_r_mine.x=int(p.x)-1
     pozitie_r_mine.y=int(p.y)+1
-    if (search_poz(pozitie_r_op, stare_oponent)==True and pozitie_valida(pozitie_r_op) and pozitie_valida(pozitie_r_mine)):
+    if (search_poz(pozitie_r_op, stare_oponent)==True and search_poz(pozitie_r_mine, starea_mea)==False
+        and pozitie_valida(pozitie_r_op) and pozitie_valida(pozitie_r_mine)):
         stare_right = [];
         k = 0
         for p2 in starea_mea:
@@ -200,9 +202,10 @@ def calculeaza_cost(poz, starea_mea, stare_op):
     cost=0
     for p in starea_mea:
         count=p.y
-        while count!=0:
-            cost=cost+count*10
-            count=count-1
+        if (count!=8):
+            while count!=0:
+                cost=cost+count*10
+                count=count-1
     pozitie_care_ma_poate_ataca=Pozitie()
     pozitie_care_ma_poate_ataca.x=poz.x-1
     pozitie_care_ma_poate_ataca.y=6-poz.y;
@@ -221,9 +224,10 @@ def cost_op(stare):
     cost=0
     for p in stare:
         count=int(p.y)
-        while count!=0:
-            cost=cost+count*10
-            count=count-1
+        if (count!=8):
+            while count!=0:
+                cost=cost+count*10
+                count=count-1
     return cost
 
 #functie returneaza starea oponentului daca noi am facut o anumita mutare (vf daca am elminat o piesa pt oponent)
@@ -231,7 +235,7 @@ def modifica_stare(pozitie, stare):
     stare_op=[]
     k=0
     for p in stare:
-        if (int(p.x)==int(pozitie.x) and int(p.y)==7-int(pozitie.y)):
+        if (int(p.x)==int(pozitie.x) and int(p.y)==int(pozitie.y)):
             p2=Pozitie(8,8)
             stare_op.insert(k, p2)
         else:
@@ -267,14 +271,19 @@ def strategie(starea_mea, stare_op):
     stare_aleasa=Stare_posibila()
     for p in starea_mea:
         stari=stari_posibile(p, starea_mea, stare_op)
+        print "DIFF"
         for s in stari:
             if (stare_finala(s.stare_p)):
                 return s
             c1=calculeaza_cost(s.p, s.stare_p, stare_op)
             temp=list(stare_op)
-            st=modifica_stare(s.p, temp)
+            r=Pozitie()
+            r.x=s.p.x
+            r.y=7-int(s.p.y)
+            st=modifica_stare(r, temp)
             c2=cost_op(st)
             diff=c1-c2
+            print diff
             if (diff>diffMax):
                 diffMax=diff
                 k=0
