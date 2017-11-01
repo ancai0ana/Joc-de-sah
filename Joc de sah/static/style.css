@@ -5,7 +5,7 @@
 td{
     height: 60px;
     width: 60px;
-    background-color: #e2ae8e;
+    background-color: rgb(245, 197, 197);
 
 }
 .container
@@ -13,19 +13,85 @@ td{
     position:center;
 }
 .pion{
-    height: 50px;
-    width: 50px;
+    height: 45px;
+    width: 45px;
+}
+
+.col-sm-1{
+    padding: 0 !important;
+    margin: 0 !important;
 }
 
 .box1{
-    background-color: #ce672b;
+    background-color: #d16a6a;
 }
 
 table{
-    border-color: rgb(139, 84, 21);
+    border-color: rgb(175, 8, 30);
     border-width: 10px;
+    
+    
 }
 
 hide{
     display: none;
+}
+.floating-box {
+    display: inline-block;
+
+}
+
+.button1 {width: 50%;}
+
+.shad{
+    box-shadow: 30px 10px 5px #888888;
+}
+
+p.inline {
+    display: inline;
+}
+.numbers{
+    color: rgb(121, 24, 24);
+    font-size: 22px;
+   
+}
+.numbers2{
+    float: right;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.num0{
+    padding: 22px 0px 0px 0px;
+}
+.num1{
+    padding: 20px 0px 0px 0px;
+}
+.num2{
+    padding: 18px 0px 0px 0px;
+}
+.num3{
+    padding: 16px 0px 0px 0px;
+}
+.num4{
+    padding: 18px 0px 0px 0px;
+}
+.num5{
+    padding: 20px 0px 0px 0px;
+}
+.num6{
+    padding: 22px 0px 0px 0px;
+}
+.num7{
+    padding: 20px 0px 0px 0px;
+}
+span{
+    visibility:hidden;
+}
+.down1{
+    padding: 5px 0px 0px 0px !important;
+}
+
+.down2{
+    padding: 6px 0px 0px 0px !important;
 }
