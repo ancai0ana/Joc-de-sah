@@ -1,4 +1,5 @@
 """hi"""
+import random
 from flask import Flask
 from flask import request
 from flask import render_template
@@ -22,9 +23,7 @@ class Stare_posibila:
     stare_p=[]
     p=Pozitie(0,0)
 
-
 app = Flask(__name__)
-
 
 
 def initializeaza():
@@ -38,6 +37,7 @@ def initializeaza():
 
 starea_mea = initializeaza()
 stare_op = initializeaza()
+index=1
 
 @app.route('/')
 def my_form():
@@ -46,9 +46,7 @@ def my_form():
     k = 0
     return render_template("interfata.html", starea_mea=starea_mea, stare_op=stare_op, eroare=False)
 
-
 app.debug = True
-
 
 @app.route('/', methods=['POST'])
 def my_form_post():
@@ -61,11 +59,10 @@ def my_form_post():
     pf = Pozitie(xf, yf)
     global stare_op
     global starea_mea
+    global index
 
     #verificam daca e o mutare Valida
     pos=stari_posibile(p, stare_op, starea_mea)
-
-
 
     gasit=False
     for s in pos:
@@ -99,17 +96,20 @@ def my_form_post():
 
     if (stare_finala(stare_op)):
         print "AI CASTIGAT"
-    w = strategie(starea_mea, stare_op)
+        return render_template("castig.html", winner="YOU WIN")
+    w = strategie(starea_mea, stare_op, index)
+    index=index+1
     if (stare_finala(w.stare_p)):
+        print "robo win"
+        return render_template("castig.html", winner="ROBO WINS")
         starea_mea = w.stare_p;
     else:
+        if (len(w.stare_p)==0):
+            return render_template("castig.html", winner="YOU WIN")
         starea_mea = muta(w.stare_p[0], w.stare_p[1], starea_mea)
         r=Pozitie(w.stare_p[1].x, 7-int(w.stare_p[1].y))
         stare_op = modifica_stare(r, stare_op)
-        # print "Muta", w.stare_p[0].x, w.stare_p[0].y, " la ", w.stare_p[1].x, w.stare_p[1].y
-        print "ROBO A MUTAT"
 
-    print "DIN INTERFATA", xi, yi, xf, yf
     return render_template("interfata.html", starea_mea=starea_mea, stare_op=stare_op, eroare=False)
 
 
@@ -206,6 +206,22 @@ def calculeaza_cost(poz, starea_mea, stare_op):
             while count!=0:
                 cost=cost+count*10
                 count=count-1
+            if (int(p.x) == 0):
+                cost = cost + 0
+            elif (int(p.x) == 1):
+                cost = cost + int(p.y)*1
+            elif (int(p.x) == 2):
+                cost = cost + int(p.y)*2
+            elif (int(p.x) == 3):
+                cost = cost + int(p.y)*3
+            elif (int(p.x) == 4):
+                cost = cost + int(p.y)*3
+            elif (int(p.x) == 5):
+                cost = cost + int(p.y)*2
+            elif (int(p.x) == 6):
+                cost = cost + int(p.y)*1
+            else:
+                cost = cost + 0
     pozitie_care_ma_poate_ataca=Pozitie()
     pozitie_care_ma_poate_ataca.x=poz.x-1
     pozitie_care_ma_poate_ataca.y=6-poz.y;
@@ -218,6 +234,7 @@ def calculeaza_cost(poz, starea_mea, stare_op):
         while count != 0:
             cost = cost - count * 10
             count = count - 1
+    print cost
     return cost
 
 def cost_op(stare):
@@ -228,6 +245,23 @@ def cost_op(stare):
             while count!=0:
                 cost=cost+count*10
                 count=count-1
+        if (int(p.x)==0):
+            cost=cost+0
+        elif (int(p.x)==1):
+            cost=cost+int(p.y)*1
+        elif (int(p.x)==2):
+            cost=cost+int(p.y)*2
+        elif (int(p.x)==3):
+            cost=cost+int(p.y)*3
+        elif (int(p.x)==4):
+            cost=cost+int(p.y)*3
+        elif (int(p.x)==5):
+            cost=cost+int(p.y)*2
+        elif (int(p.x)==6):
+            cost=cost+int(p.y)*1
+        else:
+            cost=cost+int(p.y)*0
+    print cost
     return cost
 
 #functie returneaza starea oponentului daca noi am facut o anumita mutare (vf daca am elminat o piesa pt oponent)
@@ -266,11 +300,27 @@ def muta(pozitie_initiala, pozitie_finala, stare):
 
     return stare_f2
 
-def strategie(starea_mea, stare_op):
+def strategie(starea_mea, stare_op, index):
     diffMax=-5000
     stare_aleasa=Stare_posibila()
+    stari=[]
+    k=0
+    count_random=0 #daca nu gasim dupa 100 de cautari inseamna ca nu mai avem mutari posibile
+    if (index % 3 == 0):
+        while (len(stari)==0 and count_random<100):
+            i = random.randint(0, len(starea_mea)-1)
+            stari=stari_posibile(starea_mea[i], starea_mea, stare_op)
+            count_random=count_random+1
+        j=random.randint(0, len(stari)-1)
+        if (stare_finala(stari[j].stare_p)):
+            return stari[j]
+        stare_aleasa.stare_p.insert(k, starea_mea[i])
+        k = k + 1
+        stare_aleasa.stare_p.insert(k, stari[j].p)
+        return stare_aleasa
     for p in starea_mea:
         stari=stari_posibile(p, starea_mea, stare_op)
+
         print "DIFF"
         for s in stari:
             if (stare_finala(s.stare_p)):
@@ -307,38 +357,7 @@ def print_matrice(starea_mea, stare_op):
 def main():
     app.run()
 
-    # while (stare_finala(starea_mea)==False and stare_finala(stare_op)==False):
-    #     x = int(input("x initial: "))
-    #     y = int(input("y initial: "))
-    #     p=Pozitie(x,y)
-    #     x2 = int(input("x final: "))
-    #     y2 = int(input("y final: "))
-    #     pf = Pozitie(x2, y2)
-    #     stare_op=muta(p,pf,stare_op)
-    #     print "AI MUTAT"
-    #     y=print_matrice(starea_mea, stare_op)
-    #     w = strategie(starea_mea, stare_op)
-    #     if (stare_finala(w.stare_p)):
-    #         starea_mea=w.stare_p;
-    #         break;
-    #     starea_mea=muta(w.stare_p[0], w.stare_p[1], starea_mea)
-    #     #print "Muta", w.stare_p[0].x, w.stare_p[0].y, " la ", w.stare_p[1].x, w.stare_p[1].y
-    #     print "ROBO A MUTAT"
-    #     y=print_matrice(starea_mea, stare_op)
-    #
-    # if (stare_finala(starea_mea)):
-    #     print "winner: AI"
-    # if (stare_finala(stare_op)):
-    #     print "winner:human"
-
-
 
 if __name__ == "__main__":
      main()
-
-
-
-
-
-
 
