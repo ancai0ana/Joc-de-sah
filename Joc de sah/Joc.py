@@ -44,7 +44,7 @@ def my_form():
     for s in starea_mea:
         print s.x, s.y
     k = 0
-    return render_template("interfata.html", starea_mea=starea_mea, stare_op=stare_op, eroare=False)
+    return render_template("interfata.html", starea_mea=starea_mea, stare_op=stare_op, eroare=False, winner="")
 
 app.debug = True
 
@@ -71,7 +71,7 @@ def my_form_post():
     if gasit==False:
         pos = stari_posibile(p, stare_op, starea_mea)
         print "nu se poate"
-        return render_template("interfata.html", starea_mea=starea_mea, stare_op=stare_op, eroare=True)
+        return render_template("interfata.html", starea_mea=starea_mea, stare_op=stare_op, eroare=True, winner="")
 
     r = Pozitie(pf.x, 7 -int(pf.y))
 
@@ -96,21 +96,21 @@ def my_form_post():
 
     if (stare_finala(stare_op)):
         print "AI CASTIGAT"
-        return render_template("castig.html", winner="YOU WIN")
+        return render_template("interfata.html",starea_mea=starea_mea, stare_op=stare_op, eroare=False, winner="YOU WIN")
     w = strategie(starea_mea, stare_op, index)
     index=index+1
     if (stare_finala(w.stare_p)):
         print "robo win"
-        return render_template("castig.html", winner="ROBO WINS")
+        return render_template("interfata.html", starea_mea=starea_mea, stare_op=stare_op, eroare=False,winner="ROBO WINS")
         starea_mea = w.stare_p;
     else:
         if (len(w.stare_p)==0):
-            return render_template("castig.html", winner="YOU WIN")
+            return render_template("interfata.html", starea_mea=starea_mea, stare_op=stare_op, eroare=False,winner="YOU WIN")
         starea_mea = muta(w.stare_p[0], w.stare_p[1], starea_mea)
         r=Pozitie(w.stare_p[1].x, 7-int(w.stare_p[1].y))
         stare_op = modifica_stare(r, stare_op)
 
-    return render_template("interfata.html", starea_mea=starea_mea, stare_op=stare_op, eroare=False)
+    return render_template("interfata.html", starea_mea=starea_mea, stare_op=stare_op, eroare=False, winner="")
 
 
 def search_poz (poz, stare):
